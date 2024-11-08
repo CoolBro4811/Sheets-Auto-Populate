@@ -17,13 +17,14 @@ function onOpen() {
 
 function populateSheet() {
   Tutors = SpreadsheetApp.getActiveSpreadsheet()
-                  .getSheetByName(settings.FormResponsesSheet) // Make sure this is the correct sheet name
+                  .getSheetByName(settings.FormResponsesSheet)
                   .getDataRange()
                   .getValues()
                   .slice(1) // Skip header row
                   .map(row => new Tutor(row));
   let optionalDate = new Date();
-  // slightly working as of 10 pm 11/7/24
-  createMonthlyCalendar(null);
-  assignTutorsToCalendar(null, Tutors);
+
+
+  // slightly working as of 10:49 pm 11/7/24
+  assignTutorsToCalendar(optionalDate, Tutors, createMonthlyCalendar(optionalDate, Tutors));
 }
