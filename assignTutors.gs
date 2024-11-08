@@ -23,7 +23,7 @@ function scheduleTutorsForWeek(tutors) {
   
   return schedule;
 }
-
+/*
 function assignTutorsToCalendar(optionalDate, tutors) {
   const date = optionalDate ? new Date(optionalDate) : new Date();
   const year = date.getFullYear();
@@ -73,47 +73,46 @@ function assignTutorsToCalendar(optionalDate, tutors) {
     Logger.log("Unscheduled Tutors:", unscheduledTutors.map(tutor => tutor.getFullName()).join("\n"));
   }
 }
-/*
+*/
 function assignTutorsToCalendar(optionalDate, tutors, calendarSheet) {
-  // Map to track which tutors are scheduled on each day
+  // track tutors that are scheduled
   let scheduledTutors = {};
 
-  // Helper function to get the column for a day of the week
+  // get column of day of week (helper)
   function getDayColumn(day) {
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    return daysOfWeek.indexOf(day) + 1; // +1 since columns in Sheets are 1-indexed
+    return daysOfWeek.indexOf(day) + 1; // 1 indexed
   }
 
-  // Iterate through each row pair (date and tutor information row)
+  // go through each row pair (date and tutor information row)
   for (let row = 2; row <= calendarSheet.getLastRow(); row += 2) {
-    const dateCell = calendarSheet.getRange(row, 1).getValue(); // Date in the current row
-    const dayOfWeek = new Date(dateCell).getDay(); // Get day of the week from date
+    const dateCell = calendarSheet.getRange(row, 1).getValue(); // date
+    const dayOfWeek = new Date(dateCell).getDay(); // day of week from date
     const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek];
 
-    // Skip weekend rows if tutors are only scheduled Monday to Friday
+    // skip weekends
     if (dayName === "Saturday" || dayName === "Sunday") continue;
 
-    // Get tutors available on this day
+    // get avail. tutors
     let tutorsForDay = tutors.filter(tutor => tutor.days.includes(dayName));
     
-    // Limit to 3 tutors per day, if available
-    tutorsForDay = tutorsForDay.slice(0, 3);
+    // max 3 tutors, chooses first 3 (COULD BE ISSUES HERE, RANDOM CHOICES/EVERY OTHER WEEK)
+    tutorsForDay = tutorsForDay.slice(0, MAX_TUTORS_PER_DAY);
 
-    // Prepare data for the tutor row
+    // get data to add
     let tutorInfo = tutorsForDay.map(tutor => tutor.getFullName()).join("\n");
-    let tutorCategories = tutorsForDay.map(tutor => tutor.categories.join(", ")).join(", ");
+    let tutorCategories = tutorsForDay.map(tutor => tutor.categories.join(", ")).join(", "); // not seeming to be working, ill check later
 
-    // Add tutor information to the sheet in the row below the date
+    // add info
     calendarSheet.getRange(row + 1, getDayColumn(dayName)).setValue(tutorInfo + "\n\n" + tutorCategories);
 
-    // Mark tutors as scheduled for tracking
+    // mark scheduled as scheduled
     tutorsForDay.forEach(tutor => scheduledTutors[tutor.email] = true);
   }
 
-  // Display tutors who weren't scheduled
+  // display unscheduled (not working?)
   const unscheduledTutors = tutors.filter(tutor => !scheduledTutors[tutor.email]);
   if (unscheduledTutors.length > 0) {
     Logger.log("Unscheduled Tutors:", unscheduledTutors.map(tutor => tutor.getFullName()).join("\n"));
   }
 }
-*/
