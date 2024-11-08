@@ -23,61 +23,50 @@ class Tutor {
     ];
   }
 
-  // Method to add a day
   addDay(day) {
     if (!this.days.includes(day)) {
       this.days.push(day);
     }
   }
 
-  // Method to remove a day
   removeDay(day) {
     this.days = this.days.filter(d => d !== day);
   }
 
-  // Method to add a category
   addCategory(category) {
     if (!this.categories.includes(category)) {
       this.categories.push(category);
     }
   }
 
-  // Method to remove a category
   removeCategory(category) {
     this.categories = this.categories.filter(c => c !== category);
   }
 
-  // Method to get full name
   getFullName() {
     return this.firstName + " " + this.lastName;
   }
 
-  // Method to update the email
   updateEmail(newEmail) {
     this.email = newEmail;
   }
 
-  // Method to get the grade
   getGrade() {
     return this.grade;
   }
 
-  // Method to update the grade
   updateGrade(newGrade) {
     this.grade = newGrade;
   }
 
-  // Method to get the days available
   getDays() {
     return this.days;
   }
 
-  // Method to get all categories
   getCategories() {
     return this.categories;
   }
 
-  // Method to get all instance data as an object
   getInfo() {
     return {
       email: this.email,
